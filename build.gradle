@@ -1,8 +1,8 @@
 plugins {
-    id 'dev.clojurephant.clojure' version '0.8.0-beta.7'
-    id 'java'
+//    id 'java'
     id 'scala'
     id 'application'
+    id 'dev.clojurephant.clojure' version '0.8.0-beta.7'
 }
 
 group = 'org.example'
@@ -45,90 +45,6 @@ dependencies {
     devImplementation 'org.clojure:tools.namespace:1.5.0'
     // Scala
     implementation 'org.scala-lang:scala3-library_3:3.3.5'
-}
-
-sourceSets {
-    main {
-        scala {
-            srcDirs = ['src/main/scala']
-        }
-        clojure {
-            srcDirs = ['src/main/clojure']
-        }
-    }
-    test {
-        scala {
-            srcDirs = ['src/test/scala']
-        }
-        clojure {
-            srcDirs = ['src/test/clojure']
-        }
-    }
-}
-
-// task compileClojure(type: JavaCompile) {
-//     source = sourceSets.main.clojure
-//     classpath = sourceSets.main.compileClasspath
-//     destinationDir = sourceSets.main.output.classesDirs.singleFile
-//     options.compilerArgs = ['-cp', classpath.asPath]
-// }
-
-// task compileScala(type: ScalaCompile) {
-//     source = sourceSets.main.scala
-//     classpath = sourceSets.main.compileClasspath + files(compileClojure.destinationDir)
-//     destinationDir = sourceSets.main.output.classesDirs.singleFile
-// }
-
-checkClojure.dependsOn compileScala
-
-// compileJava {
-//     dependsOn compileScala
-// }
-
-//tasks.withType(JavaCompile) {
-//    options.encoding = 'UTF-8'
-//}
-
-// tasks.withType(ScalaCompile) {
-//     scalaCompileOptions.useAnt = false
-// }
-
-//compileClojure {
-//    doLast {
-//        println 'Clojure compilation completed.'
-//    }
-//}
-//
-//compileScala {
-//    doLast {
-//        println 'Scala compilation completed.'
-//    }
-//}
-
-def patchModuleArg = "--patch-module=jdk.compiler=" +
-        files(sourceSets.main.java.srcDirs, sourceSets.test.java.srcDirs).asPath
-
-tasks.withType(JavaCompile).configureEach {
-    options.compilerArgs.addAll([
-            '--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED',
-            '--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED',
-            '--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED',
-            '--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED',
-            '--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED',
-            '--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED',
-            '--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED',
-            '--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED',
-            // '--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED',
-            patchModuleArg,
-            '-Xmaxerrs', '10000',
-            '-Xmaxwarns', '10000',
-            '-Awarns'
-    ])
-}
-
-// If you need --add-opens at runtime, keep this:
-tasks.withType(JavaExec).configureEach {
-    jvmArgs += ['--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED']
 }
 
 tasks.withType(Test).configureEach {

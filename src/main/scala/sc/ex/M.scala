@@ -1,16 +1,8 @@
 package sc.ex
 
-object M:
-  case class Address(street: String, zipCode: String)
-  
+object M {
   sealed trait People
-  case class Person(val name: String,val age: Int, val address: Address) extends People
-  
-  case class Gamer(
-    name: String,
-    age: Int,
-    address: Address,
-    favoriteGame: String
-  ) extends People
-  
+  case class Person(name: String, age: Int) extends People
+}  
+
 export M.*
